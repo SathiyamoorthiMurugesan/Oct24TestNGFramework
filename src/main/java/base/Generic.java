@@ -27,6 +27,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -35,13 +36,16 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 public class Generic {
 
-	WebDriver driver;
+	public WebDriver driver;
 	Select select1 = null;
 	public static ExtentReports extentReport;
 	public static ExtentTest extentLogger;
 	public static ExtentSparkReporter sparkReporter;
 	static String reportPath;
+	
+	Utilities util = new Utilities();
 
+//	@BeforeMethod
 	public WebDriver launchABrowser(String browserName) {
 
 		WebDriver driver;
@@ -63,6 +67,33 @@ public class Generic {
 		}
 
 		return driver;
+
+	}
+	
+	@BeforeMethod
+	public void launchABrowser() throws Exception {
+
+		String browserName = util.readAProperty("browser");
+
+		switch (browserName) {
+		case "Chrome":
+			System.setProperty("webdriver.chrome.driver", ".\\drivers\\chromedriver_131.exe");
+			driver = new ChromeDriver();
+			break;
+
+		case "Edge":
+			System.setProperty("webdriver.edge.driver", ".\\drivers\\msedgedriver_131.exe");
+			driver = new EdgeDriver();
+			break;
+
+		default:
+			System.setProperty("webdriver.chrome.driver", ".\\drivers\\chromedriver_131.exe");
+			driver = new ChromeDriver();
+		}
+		
+		maximizeTheWindow();
+		openAnApplication();
+		implicitWait(5);
 
 	}
 

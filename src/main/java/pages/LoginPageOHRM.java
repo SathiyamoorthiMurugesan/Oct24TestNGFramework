@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import base.Generic;
 
@@ -37,6 +38,9 @@ public class LoginPageOHRM {
 	@FindBy(xpath = "//div[@class='orangehrm-login-footer-sm']//a")
 	List<WebElement> link_SocialMedia;
 
+	@FindBy(xpath = "//h6[text() = 'Dashboard']")
+	WebElement text_DashboardPageHeader;
+
 //	public static void loginDetails(String Username, String Password) {
 //		driver.findElement(By.xpath("//input[@name='username']")).sendKeys(Username);
 //		driver.findElement(By.xpath("//input[@name='password']")).sendKeys(Password);
@@ -53,6 +57,10 @@ public class LoginPageOHRM {
 		generic.sendTextToAnElement(textBox_UserName, userName);
 		generic.sendTextToAnElement(textBox_Password, password);
 		generic.clickAnElement(button_Login);
+//		Assert.assertEquals(text_DashboardPageHeader.getText(), "Dashboard");
+		
+		CommonPageOHRM commonPage = new CommonPageOHRM(driver);
+		commonPage.validateThePageHeader("Dashboard");
 	}
 
 	public void openGivenSocialMediaPageOfOrangeHRM(String socialMediaName) {
@@ -61,7 +69,7 @@ public class LoginPageOHRM {
 //				generic.clickAnElement(each);
 //			}
 //		}
-		
+
 		switch (socialMediaName) {
 
 		case "LinkedIn":
@@ -81,17 +89,17 @@ public class LoginPageOHRM {
 			generic.clickAnElement(link_SocialMedia.get(3));
 			break;
 		}
-		
+
 	}
-	
+
 	public void openGivenSocialMediaPageOfOrangeHRM1(String socialMediaName) {
-	socialMediaName = socialMediaName.toLowerCase();
-	for(WebElement each: link_SocialMedia) {
+		socialMediaName = socialMediaName.toLowerCase();
+		for (WebElement each : link_SocialMedia) {
 //		if(each.getDomAttribute("href").contains("linkedin")) {
-		if(each.getDomAttribute("href").contains(socialMediaName)) {
+			if (each.getDomAttribute("href").contains(socialMediaName)) {
 //			each.click();
-			generic.clickAnElement(each);
+				generic.clickAnElement(each);
+			}
 		}
 	}
-}
 }
