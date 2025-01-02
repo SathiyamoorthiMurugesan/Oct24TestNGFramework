@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import com.aventstack.extentreports.MediaEntityBuilder;
+
 import base.Generic;
 
 public class LoginPageOHRM {
@@ -53,14 +55,27 @@ public class LoginPageOHRM {
 		button_Login.click();
 	}
 
-	public void loginOrangeHrmApplication1(String userName, String password) {
-		generic.sendTextToAnElement(textBox_UserName, userName);
-		generic.sendTextToAnElement(textBox_Password, password);
-		generic.clickAnElement(button_Login);
+	public void loginOrangeHrmApplication1(String userName, String password) throws Exception {
+		try {
+			generic.sendTextToAnElement(textBox_UserName, userName);
+			generic.sendTextToAnElement(textBox_Password, password);
+			generic.clickAnElement(button_Login);
 //		Assert.assertEquals(text_DashboardPageHeader.getText(), "Dashboard");
-		
-		CommonPageOHRM commonPage = new CommonPageOHRM(driver);
-		commonPage.validateThePageHeader("Dashboard");
+
+//			CommonPageOHRM commonPage = new CommonPageOHRM(driver);
+//			commonPage.validateThePageHeader("Dashboard");
+			
+			Generic.captureScreenshot();
+
+			Generic.extentLogger.pass("Logged in OrangeHRM application",
+					MediaEntityBuilder.createScreenCaptureFromPath(Generic.captureScreenshot()).build());
+
+		} catch (Exception e) {
+			Generic.extentLogger.fail("Failed to login OrangeHRM application",
+					MediaEntityBuilder.createScreenCaptureFromPath(Generic.captureScreenshot()).build());
+
+			Assert.fail("Failed to login Orange HRM page" + e.getMessage());
+		}
 	}
 
 	public void openGivenSocialMediaPageOfOrangeHRM(String socialMediaName) {

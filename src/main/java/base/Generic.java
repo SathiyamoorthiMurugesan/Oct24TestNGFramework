@@ -25,7 +25,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -36,7 +35,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 public class Generic {
 
-	public WebDriver driver;
+	public static WebDriver driver;
 	Select select1 = null;
 	public static ExtentReports extentReport;
 	public static ExtentTest extentLogger;
@@ -71,6 +70,7 @@ public class Generic {
 	}
 	
 	@BeforeMethod
+//	@BeforeClass
 	public void launchABrowser() throws Exception {
 
 		String browserName = util.readAProperty("browser");
@@ -178,7 +178,7 @@ public class Generic {
 	
 //	Report and Screenshot methods 
 	
-//	@BeforeSuite
+	@BeforeSuite
 	public void extentReport() {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMYYYY_HHmmss");
@@ -193,7 +193,7 @@ public class Generic {
 		extentReport.attachReporter(sparkReporter);
 	}
 
-//	@AfterSuite
+	@AfterSuite
 	public void flushReport() {
 		extentReport.flush();
 	}
@@ -203,7 +203,7 @@ public class Generic {
 		driver.quit();
 	}
 
-	public String captureScreenshot() throws Exception {
+	public static String captureScreenshot() throws Exception {
 		TakesScreenshot scrShot = ((TakesScreenshot) driver);
 
 		File src = scrShot.getScreenshotAs(OutputType.FILE);
@@ -521,6 +521,9 @@ public class Generic {
 		wait.until(ExpectedConditions.elementToBeClickable(ele));
 	}
 
-
+	public void waitForElementToBeVisible(WebElement ele, long seconds) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(seconds));
+		wait.until(ExpectedConditions.visibilityOf(ele));
+	}
 
 }
